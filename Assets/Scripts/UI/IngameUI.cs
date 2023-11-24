@@ -5,10 +5,10 @@ using UnityEngine;
 public class IngameUI : MonoBehaviour
 {
     /// <summary>
-    /// 알리 버튼 터치 처리.
+    /// 점프 버튼 터치 처리.
     /// </summary>
-    public void OnOllieButtonClick()
+    public void OnJumpButtonClick()
     {
-        IngameManager.Instance.PlayOllie();
+        IngameManager.Instance.PlayJump();
     }
 }
