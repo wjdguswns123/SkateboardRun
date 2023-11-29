@@ -28,7 +28,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     public void EndGame()
     {
         _gameState = Enums.eGameState.EndGame;
-        _backgroundMgr.StopBackground();
+        _player.Stop();
     }
 
     /// <summary>
