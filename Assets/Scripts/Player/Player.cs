@@ -21,8 +21,8 @@ public class Player : MonoBehaviour
     {
         _rigidBody = this.GetComponent<Rigidbody2D>();
 
-        _jumpPower = 500;
-        _moveSpeed = 3f;
+        _jumpPower = 1000;
+        _moveSpeed = 4f;
         _isJump = false;
     }
 
@@ -72,6 +72,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void Stop()
     {
+        _rigidBody.gravityScale = 0f;
         _rigidBody.velocity = Vector3.zero;
     }
 
