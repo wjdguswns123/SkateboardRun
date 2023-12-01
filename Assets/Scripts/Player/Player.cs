@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
     #region Inspector
 
     [SerializeField]
     private Transform _spriteTransform;
+    [SerializeField]
+    private Animator _animator;
 
     #endregion
 
@@ -21,7 +24,7 @@ public class Player : MonoBehaviour
     {
         _rigidBody = this.GetComponent<Rigidbody2D>();
 
-        _jumpPower = 1000;
+        _jumpPower = 700;
         _moveSpeed = 4f;
         _isJump = false;
     }
@@ -45,13 +48,18 @@ public class Player : MonoBehaviour
                 if (_isJump && yVel < 0f && rayHit.distance < 0.2f)
                 {
                     _isJump = false;
+
+                    if (_animator != null)
+                    {
+                        _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                    }
                 }
 
                 _spriteTransform.localRotation = _isJump ? Quaternion.identity : Quaternion.Euler(bottomRot);
             }
             _rigidBody.velocity = _rigidBody.transform.right * _moveSpeed + bottomRot * _moveSpeed + Vector3.up * yVel;
 
-            Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
+            //Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
         }
     }
 
@@ -61,6 +69,12 @@ public class Player : MonoBehaviour
     public void Jump()
     {
         _isJump = true;
+
+        if(_animator != null)
+        {
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
+        }
+
         Vector3 velocity = _rigidBody.velocity;
         velocity.y = 0f;
         _rigidBody.velocity = velocity;
