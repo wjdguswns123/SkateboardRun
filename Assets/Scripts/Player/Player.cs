@@ -37,6 +37,11 @@ public class Player : MonoBehaviour
     {
         _state = ePlayerState.Run;
         _rigidBody.WakeUp();
+
+        if (_animator != null)
+        {
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+        }
     }
 
     private void Update()
