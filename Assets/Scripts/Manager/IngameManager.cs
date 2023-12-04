@@ -10,7 +10,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     private Player _player;
 
     [SerializeField]
-    private BackgroundManager _backgroundMgr;
+    private Stage _tempCurrentStage;
 
     #endregion
 
@@ -19,16 +19,55 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     private void Start()
     {
+        //LoadStage();
+
+        StartGame();
+    }
+
+    /// <summary>
+    /// 게임 시작.
+    /// </summary>
+    public void StartGame()
+    {
+        _tempCurrentStage.SetStartPoint(_player.transform);
+        _player.Init();
         _gameState = Enums.eGameState.Playing;
+    }
+
+    /// <summary>
+    /// 게임 재시작.
+    /// </summary>
+    public void RestartGame()
+    {
+        StartGame();
+    }
+
+    /// <summary>
+    /// 일시 정지.
+    /// </summary>
+    public void Pause()
+    {
+
     }
 
     /// <summary>
     /// 게임 종료.
     /// </summary>
-    public void EndGame()
+    public void EndGame(bool isSuccess)
     {
         _gameState = Enums.eGameState.EndGame;
         _player.Stop();
+
+        GameResultUI resultUI = UIManager.Instance.LoadUI("GameResultUI").GetComponent<GameResultUI>();
+        resultUI.ShowResult(isSuccess);
+    }
+
+    /// <summary>
+    /// 게임 나가기.
+    /// </summary>
+    public void ExitGame()
+    {
+        GameManager.Instance.ExitGame();
     }
 
     /// <summary>

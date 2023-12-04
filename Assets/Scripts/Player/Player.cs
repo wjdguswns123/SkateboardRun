@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private enum ePlayerState { Run, Jump, Fall }
+
     #region Inspector
 
     [SerializeField]
@@ -18,7 +20,7 @@ public class Player : MonoBehaviour
 
     private float _moveSpeed;   // 이동 속도.
     private float _jumpPower;   // 점프 파워 수치. 레벨 업을 통해 강화 할 수 있을지도...
-    private bool _isJump;
+    private ePlayerState _state;
 
     private void Awake()
     {
@@ -26,7 +28,15 @@ public class Player : MonoBehaviour
 
         _jumpPower = 700;
         _moveSpeed = 4f;
-        _isJump = false;
+    }
+
+    /// <summary>
+    /// 플레이어 초기화.
+    /// </summary>
+    public void Init()
+    {
+        _state = ePlayerState.Run;
+        _rigidBody.WakeUp();
     }
 
     private void Update()
@@ -45,9 +55,9 @@ public class Player : MonoBehaviour
                 var angle = Vector2.SignedAngle(Vector2.up, rayHit.normal);
                 bottomRot = Vector3.forward * angle;
 
-                if (_isJump && yVel < 0f && rayHit.distance < 0.2f)
+                if (_state == ePlayerState.Jump && yVel < 0f && rayHit.distance < 0.2f)
                 {
-                    _isJump = false;
+                    _state = ePlayerState.Run;
 
                     if (_animator != null)
                     {
@@ -55,10 +65,13 @@ public class Player : MonoBehaviour
                     }
                 }
 
-                _spriteTransform.localRotation = _isJump ? Quaternion.identity : Quaternion.Euler(bottomRot);
+                _spriteTransform.localRotation = _state == ePlayerState.Jump ? Quaternion.identity : Quaternion.Euler(bottomRot);
             }
-            _rigidBody.velocity = _rigidBody.transform.right * _moveSpeed + bottomRot * _moveSpeed + Vector3.up * yVel;
 
+            if(_state != ePlayerState.Fall)
+            {
+                _rigidBody.velocity = _rigidBody.transform.right * _moveSpeed + bottomRot * _moveSpeed + Vector3.up * yVel;
+            }
             //Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
         }
     }
@@ -68,9 +81,9 @@ public class Player : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        _isJump = true;
+        _state = ePlayerState.Jump;
 
-        if(_animator != null)
+        if (_animator != null)
         {
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
         }
@@ -86,20 +99,38 @@ public class Player : MonoBehaviour
     /// </summary>
     public void Stop()
     {
-        _rigidBody.gravityScale = 0f;
-        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.Sleep();
     }
 
     /// <summary>
-    /// 충돌 처리.
+    /// 트리거 접촉 처리.
     /// </summary>
     /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 장애물에 충돌하면 게임 종료.
-        if(collision.CompareTag("Hurdle"))
+        switch(collision.tag)
         {
-            IngameManager.Instance.EndGame();
+            case ConstantValues.TAG_HURDLE:
+                IngameManager.Instance.EndGame(false);       // 장애물에 충돌하면 게임 종료.
+                break;
+            case ConstantValues.TAG_HOLE:
+                _state = ePlayerState.Fall;
+                break;
+            case ConstantValues.TAG_END_POINT:
+                IngameManager.Instance.EndGame(true);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 트리거 접촉 나가기 처리.
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag(ConstantValues.TAG_HOLE))
+        {
+            IngameManager.Instance.EndGame(false);
         }
     }
 }
