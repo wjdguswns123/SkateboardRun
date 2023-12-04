@@ -24,6 +24,7 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
         RectTransform rt = ui.GetComponent<RectTransform>();
         rt.SetParent(_uiCanvas.transform);
         rt.anchoredPosition = Vector2.zero;
+        rt.localScale = Vector3.one;
         rt.offsetMin = Vector2.zero;
         rt.offsetMax = Vector2.zero;
         return ui;
