@@ -12,6 +12,9 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     [SerializeField]
     private Stage _tempCurrentStage;
 
+    [SerializeField]
+    private IngameUI _ingameUI;
+
     #endregion
 
     private Enums.eGameState _gameState;
@@ -19,12 +22,31 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     public PlayerController Player { get { return _player; } }
 
+    private int _clearScore;
+    private int _currentGetCoinCount;
+
     private void Start()
     {
         //LoadStage();
 
+        _clearScore = 5000;
+
         StartGame();
     }
+
+    private void LateUpdate()
+    {
+        if(_gameState == Enums.eGameState.Playing)
+        {
+            // 현재 진행 점수 표시.
+            var currentRate = _tempCurrentStage.GetCurrentRate(_player.transform.position.x);
+            int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * ConstantValues.COIN_SCORE;
+
+            _ingameUI.SetScoreUI(currentScore);
+        }
+    }
+
+    #region Process
 
     /// <summary>
     /// 게임 시작.
@@ -33,6 +55,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         _tempCurrentStage.SetStartPoint(_player.transform);
         _player.Init();
+        _currentGetCoinCount = 0;
         _gameState = Enums.eGameState.Playing;
     }
 
@@ -70,6 +93,16 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     public void ExitGame()
     {
         GameManager.Instance.ExitGame();
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 코인 획득 처리.
+    /// </summary>
+    public void GetCoin()
+    {
+        ++_currentGetCoinCount;
     }
 
     /// <summary>

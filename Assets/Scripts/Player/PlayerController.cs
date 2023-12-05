@@ -128,6 +128,9 @@ public class PlayerController : MonoBehaviour
             case ConstantValues.TAG_HOLE:
                 _state = ePlayerState.Fall;
                 break;
+            case ConstantValues.TAG_COIN:
+                IngameManager.Instance.GetCoin();
+                break;
             case ConstantValues.TAG_END_POINT:
                 IngameManager.Instance.EndGame(true);
                 break;
