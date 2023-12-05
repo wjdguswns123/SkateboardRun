@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private enum ePlayerState { Run, Jump, Fall }
 

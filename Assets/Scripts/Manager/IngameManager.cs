@@ -7,7 +7,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     #region Inspector
 
     [SerializeField]
-    private Player _player;
+    private PlayerController _player;
 
     [SerializeField]
     private Stage _tempCurrentStage;
@@ -16,6 +16,8 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     private Enums.eGameState _gameState;
     public Enums.eGameState GameState { get { return _gameState; } }
+
+    public PlayerController Player { get { return _player; } }
 
     private void Start()
     {
