@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if(IngameManager.Instance.GameState == Enums.eGameState.Playing)
         {
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
                 var angle = Vector2.SignedAngle(Vector2.up, rayHit.normal);
                 bottomRot = Vector3.forward * angle;
 
-                if (_state == ePlayerState.Jump && yVel < 0f && rayHit.distance < 0.2f)
+                if (_state == ePlayerState.Jump && yVel <= 0f && rayHit.distance < 0.2f)
                 {
                     _state = ePlayerState.Run;
 
@@ -86,6 +86,12 @@ public class Player : MonoBehaviour
     /// </summary>
     public void Jump()
     {
+        // 점프 중/낙하 중 일 땐 점프 안함.
+        if(_state == ePlayerState.Jump || _state == ePlayerState.Fall)
+        {
+            return;
+        }
+
         _state = ePlayerState.Jump;
 
         if (_animator != null)
@@ -93,8 +99,9 @@ public class Player : MonoBehaviour
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
         }
 
+        // 내리막 경사일 때 y 속도가 0 이하인 것을 점프 시 0으로 초기화.
         Vector3 velocity = _rigidBody.velocity;
-        velocity.y = 0f;
+        velocity.y = 0.1f;
         _rigidBody.velocity = velocity;
         _rigidBody.AddForce(new Vector2(0f, _jumpPower));
     }
