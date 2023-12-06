@@ -55,6 +55,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         _tempCurrentStage.SetStartPoint(_player.transform);
         _player.Init();
+        _ingameUI.Init();
         _currentGetCoinCount = 0;
         _gameState = Enums.eGameState.Playing;
     }
@@ -108,11 +109,20 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     /// <summary>
     /// 캐릭터 점프 실행.
     /// </summary>
-    public void PlayJump()
+    public void PlayJump(int skillIndex)
     {
         if(_gameState == Enums.eGameState.Playing)
         {
-            _player.Jump();
+            _player.Jump(skillIndex);
         }
+    }
+
+    /// <summary>
+    /// 스킬 버튼 활성화.
+    /// </summary>
+    /// <param name="skillIndexs"></param>
+    public void SetReadySkill(List<int> skillIndexs)
+    {
+        _ingameUI.SetActiveSkillButton(skillIndexs);
     }
 }

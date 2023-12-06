@@ -10,6 +10,8 @@ public class Stage : MonoBehaviour
     private GameObject _startPoint;
     [SerializeField]
     private GameObject _endPoint;
+    [SerializeField]
+    private HurdleReadyPoint[] _hurdleReadyPoints;
 
     #endregion
 
@@ -18,6 +20,11 @@ public class Stage : MonoBehaviour
     private void Start()
     {
         _stageLength = _endPoint.transform.position.x - _startPoint.transform.position.x;   // 스테이지 전체 길이 계산.
+
+        for(int i = 0; i < _hurdleReadyPoints.Length; ++i)
+        {
+            _hurdleReadyPoints[i].Set();
+        }
     }
 
     /// <summary>

@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator _animator;
 
+    [SerializeField]
+    private GameObject _tempSkill1;     // 임시 스킬 표시용.
+    [SerializeField]
+    private GameObject _tempSkill2;     // 임시 스킬 표시용.
+
     #endregion
 
     private Rigidbody2D _rigidBody;
@@ -68,6 +73,9 @@ public class PlayerController : MonoBehaviour
                     {
                         _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
                     }
+
+                    _tempSkill1.SetActive(false);
+                    _tempSkill2.SetActive(false);
                 }
 
                 _spriteTransform.localRotation = _state == ePlayerState.Jump ? Quaternion.identity : Quaternion.Euler(bottomRot);
@@ -84,7 +92,8 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 플레이어 점프 실행.
     /// </summary>
-    public void Jump()
+    /// <param name="skillIndex"></param>
+    public void Jump(int skillIndex)
     {
         // 점프 중/낙하 중 일 땐 점프 안함.
         if(_state == ePlayerState.Jump || _state == ePlayerState.Fall)
@@ -97,6 +106,15 @@ public class PlayerController : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
+        }
+
+        if(skillIndex == 1)
+        {
+            _tempSkill1.SetActive(true);
+        }
+        else if (skillIndex == 2)
+        {
+            _tempSkill2.SetActive(true);
         }
 
         // 내리막 경사일 때 y 속도가 0 이하인 것을 점프 시 0으로 초기화.
