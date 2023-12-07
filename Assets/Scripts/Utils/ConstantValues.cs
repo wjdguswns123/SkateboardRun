@@ -9,6 +9,7 @@ public static class ConstantValues
     public const string TAG_HOLE = "Hole";                  // 낭떠러지 태그.
     public const string TAG_END_POINT = "EndPoint";         // 결승점 태그.
     public const string TAG_COIN = "Coin";                  // 코인 태그.
+    public const string TAG_GRIND_OBJECT = "GrindObject";   // 그라인드 기물 태그.
 
     #endregion
 

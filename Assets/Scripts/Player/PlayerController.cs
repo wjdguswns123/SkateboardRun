@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum ePlayerState { Run, Jump, Fall }
+    private enum ePlayerState { Run, Jump, Grind, Fall }
 
     #region Inspector
 
@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviour
     private float _jumpPower;   // 점프 파워 수치. 레벨 업을 통해 강화 할 수 있을지도...
     private ePlayerState _state;
 
+    private float _grindInputTick;          // 그라인드 버튼 입력 대기 틱.
+    private bool _isPressGrindButton;       // 그라인드 버튼 터치 중인지.
+    private Collider2D _isCurrentGrindCollider;     // 현재 그라인드 중인 기물 콜라이더.
+
     private void Awake()
     {
         _rigidBody = this.GetComponent<Rigidbody2D>();
@@ -42,6 +46,10 @@ public class PlayerController : MonoBehaviour
     {
         _state = ePlayerState.Run;
         _rigidBody.WakeUp();
+
+        _grindInputTick = 0f;
+        _isPressGrindButton = false;
+        _isCurrentGrindCollider = null;
 
         if (_animator != null)
         {
@@ -67,21 +75,62 @@ public class PlayerController : MonoBehaviour
 
                 if (_state == ePlayerState.Jump && yVel <= 0f && rayHit.distance < 0.2f)
                 {
-                    _state = ePlayerState.Run;
-
-                    if (_animator != null)
+                    if(rayHit.collider.CompareTag(ConstantValues.TAG_GRIND_OBJECT))
                     {
-                        _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                        // 그라인드 기물에 착지하면 그라인드 모드로.
+                        _state = ePlayerState.Grind;
+                        _grindInputTick = 0f;
+                        _isCurrentGrindCollider = rayHit.collider;
+                        IngameManager.Instance.SetGrindMode(true);
+                    }
+                    else
+                    {
+                        _state = ePlayerState.Run;
+                        if (_animator != null)
+                        {
+                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                        }
                     }
 
                     _tempSkill1.SetActive(false);
                     _tempSkill2.SetActive(false);
                 }
+                else if(_state == ePlayerState.Grind)
+                {
+                    // 그라인드 기물에서 벗어났으면, 다시 달리기 모드로.
+                    if (!rayHit.collider.CompareTag(ConstantValues.TAG_GRIND_OBJECT))
+                    {
+                        _state = ePlayerState.Run;
+                        if (_animator != null)
+                        {
+                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                        }
+                        IngameManager.Instance.SetGrindMode(false);
+                    }
+                    else if(!_isPressGrindButton)
+                    {
+                        // 그라인드 시작 후, 0.5 초 버튼 입력 대기 시간.
+                        if(_grindInputTick < 0.5f)
+                        {
+                            _grindInputTick += Time.deltaTime;
+                        }
+                        else
+                        {
+                            rayHit.collider.enabled = false;
+                            _state = ePlayerState.Run;
+                            if (_animator != null)
+                            {
+                                _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                            }
+                            IngameManager.Instance.SetGrindMode(false);
+                        }
+                    }
+                }
 
                 _spriteTransform.localRotation = _state == ePlayerState.Jump ? Quaternion.identity : Quaternion.Euler(bottomRot);
             }
 
-            if(_state != ePlayerState.Fall)
+            if (_state != ePlayerState.Fall)
             {
                 _rigidBody.velocity = _rigidBody.transform.right * _moveSpeed + bottomRot * _moveSpeed + Vector3.up * yVel;
             }
@@ -125,6 +174,36 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// 그라인드 유지 시작.
+    /// </summary>
+    public void Grind()
+    {
+        if(_state == ePlayerState.Grind && !_isPressGrindButton)
+        {
+            _isPressGrindButton = true;
+        }
+    }
+
+    /// <summary>
+    /// 그라인드 종료.
+    /// </summary>
+    public void EndGrind()
+    {
+        if (_state == ePlayerState.Grind && _isPressGrindButton)
+        {
+            _isPressGrindButton = false;
+            _isCurrentGrindCollider.enabled = false;
+            _isCurrentGrindCollider = null;
+            _state = ePlayerState.Run;
+            if (_animator != null)
+            {
+                _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+            }
+            IngameManager.Instance.SetGrindMode(false);
+        }
+    }
+
+    /// <summary>
     /// 플레이어 이동 정지.
     /// </summary>
     public void Stop()
@@ -151,6 +230,25 @@ public class PlayerController : MonoBehaviour
                 break;
             case ConstantValues.TAG_END_POINT:
                 IngameManager.Instance.EndGame(true);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 충돌박스 접촉 처리.
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        switch (collision.collider.tag)
+        {
+            case ConstantValues.TAG_GRIND_OBJECT:
+                {
+                    if (_state != ePlayerState.Grind)
+                    {
+                        IngameManager.Instance.EndGame(false);
+                    }
+                }
                 break;
         }
     }

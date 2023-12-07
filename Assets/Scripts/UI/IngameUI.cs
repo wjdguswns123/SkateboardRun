@@ -10,6 +10,11 @@ public class IngameUI : MonoBehaviour
     #region Inspector
 
     [SerializeField]
+    private Button _jumpButton;
+    [SerializeField]
+    private Button _grindButton;
+
+    [SerializeField]
     private TMP_Text _scoreText;
     [SerializeField]
     private SkillButton[] _skillButtons;
@@ -23,6 +28,7 @@ public class IngameUI : MonoBehaviour
     {
         _scoreText.text = "0";
         DisableAllSkillButton();
+        SetGrindMode(false);
     }
 
     /// <summary>
@@ -56,6 +62,16 @@ public class IngameUI : MonoBehaviour
             _skillButtons[i].gameObject.SetActive(true);
             _skillButtons[i].Set(skillIndexs[i]);
         }
+    }
+
+    /// <summary>
+    /// 그라인드 모드 설정.
+    /// </summary>
+    /// <param name="enable"></param>
+    public void SetGrindMode(bool enable)
+    {
+        _jumpButton.gameObject.SetActive(!enable);
+        _grindButton.gameObject.SetActive(enable);
     }
 
     /// <summary>
@@ -96,5 +112,23 @@ public class IngameUI : MonoBehaviour
             IngameManager.Instance.PlayJump(0);
         }
         DisableAllSkillButton();
+    }
+
+    /// <summary>
+    /// 그라인드 버튼 누르기 처리.
+    /// </summary>
+    /// <param name="data"></param>
+    public void OnGrindButtonDown(BaseEventData data)
+    {
+        IngameManager.Instance.PlayGrind();
+    }
+
+    /// <summary>
+    /// 그라인드 버튼 떼기 처리.
+    /// </summary>
+    /// <param name="data"></param>
+    public void OnGrindButtonUp(BaseEventData data)
+    {
+        IngameManager.Instance.EndGrind();
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - EndPoint
   - Hole
   - Coin
+  - GrindObject
   layers:
   - Default
   - TransparentFX

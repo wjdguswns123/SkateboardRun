@@ -24,6 +24,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     private int _clearScore;
     private int _currentGetCoinCount;
+    private int _skillScore;
 
     private void Start()
     {
@@ -40,7 +41,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
         {
             // 현재 진행 점수 표시.
             var currentRate = _tempCurrentStage.GetCurrentRate(_player.transform.position.x);
-            int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * ConstantValues.COIN_SCORE;
+            int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * ConstantValues.COIN_SCORE + _skillScore;
 
             _ingameUI.SetScoreUI(currentScore);
         }
@@ -57,6 +58,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
         _player.Init();
         _ingameUI.Init();
         _currentGetCoinCount = 0;
+        _skillScore = 0;
         _gameState = Enums.eGameState.Playing;
     }
 
@@ -113,7 +115,33 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         if(_gameState == Enums.eGameState.Playing)
         {
+            // 스킬 점수 임시 처리.
+            var skillScore = 500;
+            _skillScore += skillScore;
+
             _player.Jump(skillIndex);
+        }
+    }
+
+    /// <summary>
+    /// 캐릭터 그라인드 실행.
+    /// </summary>
+    public void PlayGrind()
+    {
+        if (_gameState == Enums.eGameState.Playing)
+        {
+            _player.Grind();
+        }
+    }
+
+    /// <summary>
+    /// 캐릭터 그라인드 종료.
+    /// </summary>
+    public void EndGrind()
+    {
+        if (_gameState == Enums.eGameState.Playing)
+        {
+            _player.EndGrind();
         }
     }
 
@@ -124,5 +152,14 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     public void SetReadySkill(List<int> skillIndexs)
     {
         _ingameUI.SetActiveSkillButton(skillIndexs);
+    }
+
+    /// <summary>
+    /// 그라인드 모드 설정.
+    /// </summary>
+    /// <param name="enable"></param>
+    public void SetGrindMode(bool enable)
+    {
+        _ingameUI.SetGrindMode(enable);
     }
 }
