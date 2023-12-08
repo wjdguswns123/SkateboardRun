@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
         }
     }
 
@@ -89,6 +90,7 @@ public class PlayerController : MonoBehaviour
                         if (_animator != null)
                         {
                             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
                         }
                     }
 
@@ -154,17 +156,26 @@ public class PlayerController : MonoBehaviour
 
         if (_animator != null)
         {
-            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
+            switch(skillIndex)
+            {
+                case 0:
+                    _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
+                    break;
+                case 1:
+                case 2:
+                    _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, true);
+                    break;
+            }
         }
 
-        if(skillIndex == 1)
-        {
-            _tempSkill1.SetActive(true);
-        }
-        else if (skillIndex == 2)
-        {
-            _tempSkill2.SetActive(true);
-        }
+        //if(skillIndex == 1)
+        //{
+        //    _tempSkill1.SetActive(true);
+        //}
+        //else if (skillIndex == 2)
+        //{
+        //    _tempSkill2.SetActive(true);
+        //}
 
         // 내리막 경사일 때 y 속도가 0 이하인 것을 점프 시 0으로 초기화.
         Vector3 velocity = _rigidBody.velocity;
