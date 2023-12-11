@@ -14,11 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator _animator;
 
-    [SerializeField]
-    private GameObject _tempSkill1;     // 임시 스킬 표시용.
-    [SerializeField]
-    private GameObject _tempSkill2;     // 임시 스킬 표시용.
-
     #endregion
 
     private Rigidbody2D _rigidBody;
@@ -55,6 +50,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, false);
         }
     }
 
@@ -83,19 +79,18 @@ public class PlayerController : MonoBehaviour
                         _grindInputTick = 0f;
                         _isCurrentGrindCollider = rayHit.collider;
                         IngameManager.Instance.SetGrindMode(true);
+                        if(_animator != null)
+                        {
+                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
+                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, true);
+                        }
                     }
                     else
                     {
                         _state = ePlayerState.Run;
-                        if (_animator != null)
-                        {
-                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
-                        }
+                        SetRunAnimator();
                     }
-
-                    _tempSkill1.SetActive(false);
-                    _tempSkill2.SetActive(false);
                 }
                 else if(_state == ePlayerState.Grind)
                 {
@@ -103,10 +98,7 @@ public class PlayerController : MonoBehaviour
                     if (!rayHit.collider.CompareTag(ConstantValues.TAG_GRIND_OBJECT))
                     {
                         _state = ePlayerState.Run;
-                        if (_animator != null)
-                        {
-                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-                        }
+                        SetRunAnimator();
                         IngameManager.Instance.SetGrindMode(false);
                     }
                     else if(!_isPressGrindButton)
@@ -120,10 +112,7 @@ public class PlayerController : MonoBehaviour
                         {
                             rayHit.collider.enabled = false;
                             _state = ePlayerState.Run;
-                            if (_animator != null)
-                            {
-                                _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-                            }
+                            SetRunAnimator();
                             IngameManager.Instance.SetGrindMode(false);
                         }
                     }
@@ -168,15 +157,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //if(skillIndex == 1)
-        //{
-        //    _tempSkill1.SetActive(true);
-        //}
-        //else if (skillIndex == 2)
-        //{
-        //    _tempSkill2.SetActive(true);
-        //}
-
         // 내리막 경사일 때 y 속도가 0 이하인 것을 점프 시 0으로 초기화.
         Vector3 velocity = _rigidBody.velocity;
         velocity.y = 0.1f;
@@ -206,10 +186,7 @@ public class PlayerController : MonoBehaviour
             _isCurrentGrindCollider.enabled = false;
             _isCurrentGrindCollider = null;
             _state = ePlayerState.Run;
-            if (_animator != null)
-            {
-                _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-            }
+            SetRunAnimator();
             IngameManager.Instance.SetGrindMode(false);
         }
     }
@@ -220,6 +197,19 @@ public class PlayerController : MonoBehaviour
     public void Stop()
     {
         _rigidBody.Sleep();
+    }
+
+    /// <summary>
+    /// 애니메이터 Idle 설정.
+    /// </summary>
+    private void SetRunAnimator()
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
+            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, false);
+        }
     }
 
     /// <summary>
