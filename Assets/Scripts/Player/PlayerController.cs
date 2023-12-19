@@ -48,9 +48,7 @@ public class PlayerController : MonoBehaviour
 
         if (_animator != null)
         {
-            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
-            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, false);
+            _animator.Rebind();
         }
     }
 
@@ -197,6 +195,18 @@ public class PlayerController : MonoBehaviour
     public void Stop()
     {
         _rigidBody.Sleep();
+    }
+
+    /// <summary>
+    /// 플레이어 사망 애니메이션 출력.
+    /// </summary>
+    public void Die()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger(ConstantValues.ANIMATOR_TRIGGER_DIE);
+        }
+        Stop();
     }
 
     /// <summary>

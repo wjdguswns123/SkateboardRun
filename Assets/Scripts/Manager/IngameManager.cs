@@ -84,7 +84,27 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     public void EndGame(bool isSuccess)
     {
         _gameState = Enums.eGameState.EndGame;
-        _player.Stop();
+
+        if(isSuccess)
+        {
+            _player.Stop();
+        }
+        else
+        {
+            _player.Die();
+        }
+
+        StartCoroutine(DelayShowResultUI(isSuccess));
+    }
+
+    /// <summary>
+    /// 일정 시간 이후 게임 결과 UI 출력.
+    /// </summary>
+    /// <param name="isSuccess"></param>
+    /// <returns></returns>
+    private IEnumerator DelayShowResultUI(bool isSuccess)
+    {
+        yield return YieldCache.WaitForSeconds(1f);
 
         GameResultUI resultUI = UIManager.Instance.LoadUI("GameResultUI").GetComponent<GameResultUI>();
         resultUI.ShowResult(isSuccess);

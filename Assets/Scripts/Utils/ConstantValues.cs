@@ -4,6 +4,8 @@ public static class ConstantValues
     public const string ANIMATOR_BOOL_JUMP_SKILL = "Jump_Skill";        // 플레이어 애니메이터 스킬 점프 bool 이름.
     public const string ANIMATOR_BOOL_GRIND = "Grind";                  // 플레이어 애니메이터 그라인드 bool 이름.
 
+    public const string ANIMATOR_TRIGGER_DIE = "Die";                   // 플레이어 애니메이터 죽음 트리거.
+
     #region Tag
 
     public const string TAG_PLAYER = "Player";              // 플레이어 태그.
