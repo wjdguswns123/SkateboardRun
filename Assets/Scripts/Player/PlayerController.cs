@@ -30,8 +30,8 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody = this.GetComponent<Rigidbody2D>();
 
-        _jumpPower = 700;
-        _moveSpeed = 4f;
+        _jumpPower = 730;
+        _moveSpeed = 5f;
     }
 
     /// <summary>
