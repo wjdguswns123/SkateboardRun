@@ -86,8 +86,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        _state = ePlayerState.Run;
-                        SetRunAnimator();
+                        SetRun(true);
                     }
                 }
                 else if(_state == ePlayerState.Grind)
@@ -95,8 +94,7 @@ public class PlayerController : MonoBehaviour
                     // 그라인드 기물에서 벗어났으면, 다시 달리기 모드로.
                     if (!rayHit.collider.CompareTag(ConstantValues.TAG_GRIND_OBJECT))
                     {
-                        _state = ePlayerState.Run;
-                        SetRunAnimator();
+                        SetRun();
                         IngameManager.Instance.SetGrindMode(false);
                     }
                     else if(!_isPressGrindButton)
@@ -109,8 +107,7 @@ public class PlayerController : MonoBehaviour
                         else
                         {
                             rayHit.collider.enabled = false;
-                            _state = ePlayerState.Run;
-                            SetRunAnimator();
+                            SetRun();
                             IngameManager.Instance.SetGrindMode(false);
                         }
                     }
@@ -123,7 +120,7 @@ public class PlayerController : MonoBehaviour
             {
                 _rigidBody.velocity = _rigidBody.transform.right * _moveSpeed + bottomRot * _moveSpeed + Vector3.up * yVel;
             }
-            //Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
+            Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
         }
     }
 
@@ -183,9 +180,22 @@ public class PlayerController : MonoBehaviour
             _isPressGrindButton = false;
             _isCurrentGrindCollider.enabled = false;
             _isCurrentGrindCollider = null;
-            _state = ePlayerState.Run;
-            SetRunAnimator();
+            SetRun();
             IngameManager.Instance.SetGrindMode(false);
+        }
+    }
+
+    /// <summary>
+    /// 기본 달리기 모드로 설정.
+    /// </summary>
+    /// <param name="isShake"></param>
+    private void SetRun(bool isShake = false)
+    {
+        _state = ePlayerState.Run;
+        SetRunAnimator();
+        if(isShake)
+        {
+            CameraManager.Instance.CameraShake(time: 0.1f);
         }
     }
 
