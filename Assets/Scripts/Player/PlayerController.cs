@@ -86,6 +86,8 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
+                        EffectSystem landingEffect = EffectManager.Instance.LoadEffect("Effect_Landing", pos: this.transform.position);
+                        landingEffect.gameObject.SetActive(true);
                         SetRun(true);
                     }
                 }
@@ -195,7 +197,7 @@ public class PlayerController : MonoBehaviour
         SetRunAnimator();
         if(isShake)
         {
-            CameraManager.Instance.CameraShake(time: 0.1f);
+            CameraManager.Instance.CameraShake(time: 0.1f, range: 0.5f);
         }
     }
 

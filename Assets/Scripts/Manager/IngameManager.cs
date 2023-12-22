@@ -28,7 +28,16 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     private void Start()
     {
-        //LoadStage();
+        StartCoroutine(OnStartGame());
+    }
+
+    /// <summary>
+    /// 게임 시작 처리.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator OnStartGame()
+    {
+        yield return EffectManager.Instance.PreloadEffect();    // 이펙트 프리로딩.
 
         _clearScore = 5000;
 
