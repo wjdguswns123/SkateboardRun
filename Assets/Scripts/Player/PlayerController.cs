@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator _animator;
 
+    [SerializeField]
+    private Transform _centerEffectPosition;
+    [SerializeField]
+    private Transform _bottomEffectPosition;
+
     #endregion
 
     private Rigidbody2D _rigidBody;
@@ -86,7 +91,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        EffectSystem landingEffect = EffectManager.Instance.LoadEffect("Effect_Landing", pos: this.transform.position);
+                        EffectSystem landingEffect = EffectManager.Instance.LoadEffect("Effect_Landing", pos: _bottomEffectPosition.position);
                         landingEffect.gameObject.SetActive(true);
                         SetRun(true);
                     }

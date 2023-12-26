@@ -28,6 +28,8 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     private void Start()
     {
+        _gameState = Enums.eGameState.Loading;
+
         StartCoroutine(OnStartGame());
     }
 
@@ -37,9 +39,15 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     /// <returns></returns>
     private IEnumerator OnStartGame()
     {
+        SystemUIManager.Instance.ShowLoadingUI();
+
         yield return EffectManager.Instance.PreloadEffect();    // 이펙트 프리로딩.
 
         _clearScore = 5000;
+
+        yield return YieldCache.WaitForSeconds(1f); // 로딩 UI 볼려고 임시로 1초 딜레이.
+
+        SystemUIManager.Instance.HideLoadingUI();
 
         StartGame();
     }

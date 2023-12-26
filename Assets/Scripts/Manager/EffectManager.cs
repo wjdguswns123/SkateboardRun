@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EffectManager : SingletonMonoBehaviour<EffectManager>
 {
+    private const int EFFECT_PRELOAD_COUNT = 3;
+
     private Dictionary<string, List<EffectSystem>> _effectPool;
 
     /// <summary>
@@ -23,7 +25,7 @@ public class EffectManager : SingletonMonoBehaviour<EffectManager>
         {
             var effectList = new List<EffectSystem>();
             _effectPool.Add(effectObjs[i].name, effectList);
-            for (int  j = 0; j < 5; ++j)
+            for (int  j = 0; j < EFFECT_PRELOAD_COUNT; ++j)
             {
                 GameObject effect = Instantiate(effectObjs[i]) as GameObject;
                 effect.SetActive(false);
