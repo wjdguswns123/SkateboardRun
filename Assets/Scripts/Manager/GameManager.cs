@@ -8,7 +8,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         DontDestroyOnLoad(this);
 
+
+#if UNITY_EDITOR
+        Application.targetFrameRate = -1;
+#elif UNITY_ANDROID || UNITY_IOS
         Application.targetFrameRate = 60;
+#else
+        Application.targetFrameRate = -1;
+#endif
     }
 
     private void Update()

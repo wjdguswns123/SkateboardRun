@@ -361,8 +361,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fontSize: 30
   color: {r: 0, g: 0, b: 0, a: 1}
-  width: 0
-  height: 0
+  width: 80
+  height: 30
 --- !u!1 &1198298888
 GameObject:
   m_ObjectHideFlags: 0

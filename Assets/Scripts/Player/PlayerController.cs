@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
                             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, true);
                         }
                     }
-                    else
+                    else if (rayHit.collider.CompareTag(ConstantValues.TAG_BOTTOM))
                     {
                         EffectSystem landingEffect = EffectManager.Instance.LoadEffect("Effect_Landing", pos: _bottomEffectPosition.position);
                         landingEffect.gameObject.SetActive(true);
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
             {
                 _rigidBody.velocity = _rigidBody.transform.right * _moveSpeed + bottomRot * _moveSpeed + Vector3.up * yVel;
             }
-            Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
+            //Debug.DrawRay(this.transform.position, _rigidBody.velocity, Color.red);
         }
     }
 
