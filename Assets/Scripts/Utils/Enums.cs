@@ -4,6 +4,7 @@ namespace Enums
     {
         Loading,
         Playing,
+        Pause,
         EndGame,
     }
 

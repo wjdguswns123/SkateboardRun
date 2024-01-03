@@ -131,4 +131,12 @@ public class IngameUI : MonoBehaviour
     {
         IngameManager.Instance.EndGrind();
     }
+
+    /// <summary>
+    /// 일시 정지 버튼 터치 처리.
+    /// </summary>
+    public void OnPauseButtonClick()
+    {
+        IngameManager.Instance.SetGamePause();
+    }
 }

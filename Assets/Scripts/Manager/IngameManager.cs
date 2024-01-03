@@ -199,4 +199,27 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         _ingameUI.SetGrindMode(enable);
     }
+
+
+    /// <summary>
+    /// 게임 일시정지 처리.
+    /// </summary>
+    public void SetGamePause()
+    {
+        switch(_gameState)
+        {
+            case Enums.eGameState.Playing:
+                {
+                    _gameState = Enums.eGameState.Pause;
+                    Time.timeScale = 0f;
+                }
+                break;
+            case Enums.eGameState.Pause:
+                {
+                    _gameState = Enums.eGameState.Playing;
+                    Time.timeScale = 1f;
+                }
+                break;
+        }
+    }
 }
