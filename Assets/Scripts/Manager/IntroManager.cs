@@ -7,7 +7,16 @@ public class IntroManager : MonoBehaviour
 {
     private void Start()
     {
-        StartCoroutine(EnterLobby());
+        StartCoroutine(LoadData());
+    }
+
+    private IEnumerator LoadData()
+    {
+        DataManager.Instance.LoadData();
+
+        yield return YieldCache.WaitForSeconds(2f);
+
+        SceneManager.LoadSceneAsync("Lobby");
     }
 
     /// <summary>

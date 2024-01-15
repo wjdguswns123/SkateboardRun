@@ -25,10 +25,12 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     private int _clearScore;
     private int _currentGetCoinCount;
     private int _skillScore;
+    private int _coinScore;
 
     private void Start()
     {
         _gameState = Enums.eGameState.Loading;
+        _coinScore = ConfigData.Instance.GetData("COIN_SCORE").IntValue;
 
         StartCoroutine(OnStartGame());
     }
@@ -58,7 +60,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
         {
             // 현재 진행 점수 표시.
             var currentRate = _tempCurrentStage.GetCurrentRate(_player.transform.position.x);
-            int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * ConstantValues.COIN_SCORE + _skillScore;
+            int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * _coinScore + _skillScore;
 
             _ingameUI.SetScoreUI(currentScore);
         }
