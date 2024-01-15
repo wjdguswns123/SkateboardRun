@@ -10,10 +10,10 @@ using Xamasoft.JsonClassGenerator;
 
 public class DataConverter : EditorWindow
 {
-    private const string EXCEL_PATH = "/../Data/";
-    private const string JSON_PATH = "/Resources/Datas/";
-    private const string CS_FILE_NAME = "{0}.cs";
-    private const string CS_DATA_FILE_NAME = "{0}Data.cs";
+    private const string EXCEL_PATH = "/../Data/";              // 테이블 엑셀 파일 경로.
+    private const string JSON_PATH = "/Resources/Datas/";       // josn 데이터 파일 저장 경로.
+    private const string CS_FILE_NAME = "{0}.cs";               // cs 파일 이름 형식.
+    private const string CS_DATA_FILE_NAME = "{0}Data.cs";      // 데이터 관리 cs 파일 이름 형식.
 
     [MenuItem("Tools/Data Converter")]
     public static void ShowWindow()
@@ -31,14 +31,17 @@ public class DataConverter : EditorWindow
             ExcelToJson();
         }
 
-        if (GUILayout.Button("Create Data File"))
+        if (GUILayout.Button("Create cs File"))
         {
-            CreateCS();
+            JsonToCs();
         }
 
         EditorGUILayout.EndVertical();
     }
 
+    /// <summary>
+    /// Excel -> Json 변환.
+    /// </summary>
     private void ExcelToJson()
     {
         string excelPath = Application.dataPath + EXCEL_PATH;
@@ -144,7 +147,10 @@ public class DataConverter : EditorWindow
         }
     }
 
-    private void CreateCS()
+    /// <summary>
+    /// Json -> cs 파일 변환.
+    /// </summary>
+    private void JsonToCs()
     {
         string jsonPath = Application.dataPath + JSON_PATH;
         string[] files = Directory.GetFiles(jsonPath).Where(s => !s.Contains(".meta")).ToArray();
@@ -162,10 +168,6 @@ public class DataConverter : EditorWindow
         {
             FileInfo fi = new FileInfo(files[i]);
             string className = fi.Name.Substring(0, fi.Name.Length - fi.Extension.Length);
-
-            //StreamReader reader = new StreamReader(files[i], Encoding.UTF8);
-            //string json = reader.ReadToEnd();
-            //reader.Close();
 
             string json = File.ReadAllText(files[i]);
 
