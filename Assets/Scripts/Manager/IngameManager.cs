@@ -10,6 +10,9 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     private PlayerController _player;
 
     [SerializeField]
+    private BackgroundManager _bgMgr;
+
+    [SerializeField]
     private Stage _tempCurrentStage;
 
     [SerializeField]
@@ -58,11 +61,14 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         if(_gameState == Enums.eGameState.Playing)
         {
+            var currentPlayerPosX = _player.transform.position.x;
             // 현재 진행 점수 표시.
-            var currentRate = _tempCurrentStage.GetCurrentRate(_player.transform.position.x);
+            var currentRate = _tempCurrentStage.GetCurrentRate(currentPlayerPosX);
             int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * _coinScore + _skillScore;
 
             _ingameUI.SetScoreUI(currentScore);
+
+            _bgMgr.UpdateBackground(_tempCurrentStage.GetMoveLength(currentPlayerPosX));
         }
     }
 

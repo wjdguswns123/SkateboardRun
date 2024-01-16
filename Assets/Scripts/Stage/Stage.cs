@@ -45,4 +45,9 @@ public class Stage : MonoBehaviour
     {
         return (pos - _startPoint.transform.position.x) / _stageLength;
     }
+
+    public float GetMoveLength(float pos)
+    {
+        return pos - _startPoint.transform.position.x;
+    }
 }
