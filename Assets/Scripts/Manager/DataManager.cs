@@ -7,9 +7,21 @@ using Newtonsoft.Json.Linq;
 
 public class DataManager : Singleton<DataManager>
 {
+    private Dictionary<string, IData> _datas;
+
+    public void Init()
+    {
+        _datas = new Dictionary<string, IData>();
+
+        _datas.Add("Config", ConfigData.Instance);
+    }
+
     public void LoadData()
     {
-        ConfigData.Instance.LoadData();
+        foreach(KeyValuePair<string, IData> data in _datas)
+        {
+            data.Value.LoadData();
+        }
     }
 
     public List<T> LoadData<T>(string dataName, List<T> datas)

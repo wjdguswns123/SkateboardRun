@@ -285,7 +285,7 @@ namespace Xamasoft.JsonClassGenerator
                 CSharpCodeWriterConfig config = new CSharpCodeWriterConfig();
                 config.UseBaseLibrary = true;
                 config.IsSingleTon = true;
-                config.Parent = "Data";
+                config.Parent = "IData";
                 this.DataCodeWriter = new CSharpCodeWriter(config);
             }
 

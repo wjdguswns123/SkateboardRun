@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 // Data Convertor 로 생성.
-public partial class ConfigData : Singleton<ConfigData>, Data
+public partial class ConfigData : Singleton<ConfigData>, IData
 {
     public List<Config> Config { get; set; }
 
@@ -15,3 +15,4 @@ public partial class ConfigData : Singleton<ConfigData>, Data
         return Config.Find(d => d.Name == key);
     }
 }
+

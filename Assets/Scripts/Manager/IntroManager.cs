@@ -10,21 +10,18 @@ public class IntroManager : MonoBehaviour
         StartCoroutine(LoadData());
     }
 
-    private IEnumerator LoadData()
-    {
-        DataManager.Instance.LoadData();
-
-        yield return YieldCache.WaitForSeconds(2f);
-
-        SceneManager.LoadSceneAsync("Lobby");
-    }
-
     /// <summary>
-    /// 로비로 이동.
+    /// 데이터 로딩.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator EnterLobby()
+    private IEnumerator LoadData()
     {
+        DataManager.Instance.Init();
+
+        yield return null;
+
+        DataManager.Instance.LoadData();
+
         yield return YieldCache.WaitForSeconds(2f);
 
         SceneManager.LoadSceneAsync("Lobby");
