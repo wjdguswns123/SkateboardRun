@@ -10,7 +10,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     private PlayerController _player;
 
     [SerializeField]
-    private BackgroundManager _bgMgr;
+    private BackgroundController _bgCtrl;
 
     [SerializeField]
     private Stage _tempCurrentStage;
@@ -68,7 +68,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
             _ingameUI.SetScoreUI(currentScore);
 
-            _bgMgr.UpdateBackground(_tempCurrentStage.GetMoveLength(currentPlayerPosX));
+            _bgCtrl.UpdateBackground(_tempCurrentStage.GetMoveLength(currentPlayerPosX));
         }
     }
 
@@ -81,6 +81,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         _tempCurrentStage.SetStartPoint(_player.transform);
         _player.Init();
+        _bgCtrl.Init(_player.transform.localPosition);
         _ingameUI.Init();
         _currentGetCoinCount = 0;
         _skillScore = 0;
