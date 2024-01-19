@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stage : MonoBehaviour
+public class StageController : MonoBehaviour
 {
     #region Inspector
 
@@ -11,11 +11,15 @@ public class Stage : MonoBehaviour
     [SerializeField]
     private GameObject _endPoint;
     [SerializeField]
+    private BackgroundController _bgCtrl;
+    [SerializeField]
     private HurdleReadyPoint[] _hurdleReadyPoints;
 
     #endregion
 
     private float _stageLength;
+
+    public BackgroundController BGController { get { return _bgCtrl; } }
 
     private void Start()
     {
@@ -46,6 +50,11 @@ public class Stage : MonoBehaviour
         return (pos - _startPoint.transform.position.x) / _stageLength;
     }
 
+    /// <summary>
+    /// 현재 이동한 거리 반환.
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public float GetMoveLength(float pos)
     {
         return pos - _startPoint.transform.position.x;

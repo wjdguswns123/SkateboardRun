@@ -14,6 +14,7 @@ public class DataManager : Singleton<DataManager>
         _datas = new Dictionary<string, IData>();
 
         _datas.Add("Config", ConfigData.Instance);
+        _datas.Add("Stage", StageData.Instance);
     }
 
     public void LoadData()

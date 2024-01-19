@@ -7,8 +7,6 @@ public class BackgroundController : MonoBehaviour
     #region Inspector
 
     [SerializeField]
-    private Transform _backgroundParent;
-    [SerializeField]
     private SpriteRenderer[] _backgroundImages;
 
     #endregion
@@ -19,7 +17,7 @@ public class BackgroundController : MonoBehaviour
 
     private void Start()
     {
-        _changeMoveValue = _backgroundImages[1].transform.localPosition.x;
+        _changeMoveValue = _backgroundImages[1].transform.localPosition.x - _backgroundImages[0].transform.localPosition.x;
         _prevChangeLength = 0f;
     }
 
@@ -32,9 +30,9 @@ public class BackgroundController : MonoBehaviour
         _moveValue = 0f;
         _prevChangeLength = 0f;
 
-        Vector3 bgPos = _backgroundParent.transform.localPosition;
+        Vector3 bgPos = this.transform.localPosition;
         bgPos.x = startPos.x + 5f;
-        _backgroundParent.transform.localPosition = bgPos;
+        this.transform.localPosition = bgPos;
     }
 
     /// <summary>
@@ -49,18 +47,18 @@ public class BackgroundController : MonoBehaviour
             _prevChangeLength = moveLength;
             _moveValue = 0f;
 
-            var pos = _backgroundParent.transform.localPosition;
+            var pos = this.transform.localPosition;
             pos.x += _changeMoveValue;
-            _backgroundParent.transform.localPosition = pos;
+            this.transform.localPosition = pos;
         }
         else
         {
             // 배경 이미지가 스테이지 구조물보다 이동이 늦어 보이도록 하기 위해, 배경 이미지들 위치 업데이트. 
-            Vector3 bgPos = _backgroundParent.transform.localPosition;
+            Vector3 bgPos = this.transform.localPosition;
             var farBGMove = 0.5f * Time.deltaTime;
             bgPos.x += farBGMove;
             _moveValue += farBGMove;
-            _backgroundParent.transform.localPosition = bgPos;
+            this.transform.localPosition = bgPos;
         }
     }
 }

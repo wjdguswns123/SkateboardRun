@@ -10,12 +10,6 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     private PlayerController _player;
 
     [SerializeField]
-    private BackgroundController _bgCtrl;
-
-    [SerializeField]
-    private Stage _tempCurrentStage;
-
-    [SerializeField]
     private IngameUI _ingameUI;
 
     #endregion
@@ -25,10 +19,16 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
     public PlayerController Player { get { return _player; } }
 
+    private StageController _currentStageCtrl;
+
     private int _clearScore;
     private int _currentGetCoinCount;
     private int _skillScore;
     private int _coinScore;
+
+    private Stage _currentStageData;
+
+    private BackgroundController _bgCtrl => _currentStageCtrl.BGController;
 
     private void Start()
     {
@@ -46,6 +46,12 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         SystemUIManager.Instance.ShowLoadingUI();
 
+        _currentStageData = StageData.Instance.GetData(99);
+
+        yield return null;
+
+        LoadStage();
+
         yield return EffectManager.Instance.PreloadEffect();    // 이펙트 프리로딩.
 
         _clearScore = 5000;
@@ -57,18 +63,28 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
         StartGame();
     }
 
+    /// <summary>
+    /// 스테이지 프리팹 불러오기.
+    /// </summary>
+    private void LoadStage()
+    {
+        string stagePath = ConstantValues.PATH_STAGE_PREFAB + _currentStageData.ResourcePath;
+        var stageObject = Instantiate(Resources.Load(stagePath)) as GameObject;
+        _currentStageCtrl = stageObject.GetComponent<StageController>();
+    }
+
     private void LateUpdate()
     {
         if(_gameState == Enums.eGameState.Playing)
         {
             var currentPlayerPosX = _player.transform.position.x;
             // 현재 진행 점수 표시.
-            var currentRate = _tempCurrentStage.GetCurrentRate(currentPlayerPosX);
+            var currentRate = _currentStageCtrl.GetCurrentRate(currentPlayerPosX);
             int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * _coinScore + _skillScore;
 
             _ingameUI.SetScoreUI(currentScore);
 
-            _bgCtrl.UpdateBackground(_tempCurrentStage.GetMoveLength(currentPlayerPosX));
+            _bgCtrl.UpdateBackground(_currentStageCtrl.GetMoveLength(currentPlayerPosX));
         }
     }
 
@@ -79,7 +95,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     /// </summary>
     public void StartGame()
     {
-        _tempCurrentStage.SetStartPoint(_player.transform);
+        _currentStageCtrl.SetStartPoint(_player.transform);
         _player.Init();
         _bgCtrl.Init(_player.transform.localPosition);
         _ingameUI.Init();
