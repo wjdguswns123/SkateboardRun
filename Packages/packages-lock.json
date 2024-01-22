@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.coffee.atlas-image": {
+      "version": "https://github.com/mob-sakai/AtlasImage.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "82052cb4081f5a66fb9758bb0ae36ad57910a4a2"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.9",
       "depth": 1,
