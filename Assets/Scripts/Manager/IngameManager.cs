@@ -46,7 +46,9 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         SystemUIManager.Instance.ShowLoadingUI();
 
-        _currentStageData = StageData.Instance.GetData(99);
+        StageModel.Instance.Init();
+
+        _currentStageData = StageData.Instance.GetData(StageModel.Instance.CurrentStageIndex);
 
         yield return null;
 
