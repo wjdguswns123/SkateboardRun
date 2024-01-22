@@ -11,6 +11,11 @@ public class UIManager : SingletonMonoBehaviour<UIManager>
 
     #endregion
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     /// <summary>
     /// UI ·Îµù.
     /// </summary>

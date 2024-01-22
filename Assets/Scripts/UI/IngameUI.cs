@@ -137,6 +137,7 @@ public class IngameUI : MonoBehaviour
     /// </summary>
     public void OnPauseButtonClick()
     {
-        IngameManager.Instance.SetGamePause();
+        IngameManager.Instance.SetGamePause(true);
+        PopupManager.Instance.OpenPopup("GamePausePopup");
     }
 }

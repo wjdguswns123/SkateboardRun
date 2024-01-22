@@ -9,9 +9,6 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     [SerializeField]
     private PlayerController _player;
 
-    [SerializeField]
-    private IngameUI _ingameUI;
-
     #endregion
 
     private Enums.eGameState _gameState;
@@ -20,6 +17,8 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     public PlayerController Player { get { return _player; } }
 
     private StageController _currentStageCtrl;
+
+    private IngameUI _ingameUI;
 
     private int _clearScore;
     private int _currentGetCoinCount;
@@ -56,6 +55,8 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
         yield return EffectManager.Instance.PreloadEffect();    // 이펙트 프리로딩.
 
+        LoadUI();
+
         _clearScore = 5000;
 
         yield return YieldCache.WaitForSeconds(1f); // 로딩 UI 볼려고 임시로 1초 딜레이.
@@ -73,6 +74,14 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
         string stagePath = ConstantValues.PATH_STAGE_PREFAB + _currentStageData.ResourcePath;
         var stageObject = Instantiate(Resources.Load(stagePath)) as GameObject;
         _currentStageCtrl = stageObject.GetComponent<StageController>();
+    }
+
+    /// <summary>
+    /// UI 불러오기.
+    /// </summary>
+    private void LoadUI()
+    {
+        _ingameUI = UIManager.Instance.LoadUI("IngameUI").GetComponent<IngameUI>();
     }
 
     private void LateUpdate()
@@ -111,15 +120,25 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     /// </summary>
     public void RestartGame()
     {
+        SetGamePause(false);
         StartGame();
     }
 
     /// <summary>
-    /// 일시 정지.
+    /// 게임 일시정지 처리.
     /// </summary>
-    public void Pause()
+    public void SetGamePause(bool isPause)
     {
-
+        if (isPause)
+        {
+            _gameState = Enums.eGameState.Pause;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            _gameState = Enums.eGameState.Playing;
+            Time.timeScale = 1f;
+        }
     }
 
     /// <summary>
@@ -226,27 +245,5 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         _ingameUI.SetGrindMode(enable);
     }
-
-
-    /// <summary>
-    /// 게임 일시정지 처리.
-    /// </summary>
-    public void SetGamePause()
-    {
-        switch(_gameState)
-        {
-            case Enums.eGameState.Playing:
-                {
-                    _gameState = Enums.eGameState.Pause;
-                    Time.timeScale = 0f;
-                }
-                break;
-            case Enums.eGameState.Pause:
-                {
-                    _gameState = Enums.eGameState.Playing;
-                    Time.timeScale = 1f;
-                }
-                break;
-        }
-    }
+    
 }
