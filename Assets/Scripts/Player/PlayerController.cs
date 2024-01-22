@@ -287,7 +287,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.CompareTag(ConstantValues.TAG_HOLE))
+        if(_state == ePlayerState.Fall && collision.CompareTag(ConstantValues.TAG_HOLE))
         {
             IngameManager.Instance.EndGame(false);
         }
