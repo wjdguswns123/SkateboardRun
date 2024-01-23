@@ -7,6 +7,6 @@ public class StageModel : Singleton<StageModel>
 
     public void Init()
     {
-        CurrentStageIndex = 99;
+        CurrentStageIndex = 100;
     }
 }

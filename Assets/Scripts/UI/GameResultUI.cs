@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class GameResultUI : MonoBehaviour
 {
     #region Inspector
 
     [SerializeField]
-    private TMP_Text _successText;
+    private GameObject _successPart;
     [SerializeField]
-    private TMP_Text _failText;
+    private GameObject _failPart;
+
+    [SerializeField]
+    private Image[] _starImages;
 
     [SerializeField]
     private GameObject _buttonGroup;
@@ -21,11 +24,20 @@ public class GameResultUI : MonoBehaviour
     /// 결과 UI 보여주기.
     /// </summary>
     /// <param name="isSuccess"></param>
-    public void ShowResult(bool isSuccess)
+    /// <param name="star"></param>
+    public void ShowResult(bool isSuccess, int star = 0)
     {
-        _successText.gameObject.SetActive(isSuccess);
-        _failText.gameObject.SetActive(!isSuccess);
+        _successPart.SetActive(isSuccess);
+        _failPart.SetActive(!isSuccess);
         _buttonGroup.SetActive(false);
+
+        if(isSuccess)
+        {
+            for(int i = 0; i < _starImages.Length; ++i)
+            {
+                _starImages[i].gameObject.SetActive(i < star);
+            }
+        }
 
         Invoke("ShowSelectButtons", 3f);
     }
@@ -35,8 +47,6 @@ public class GameResultUI : MonoBehaviour
     /// </summary>
     private void ShowSelectButtons()
     {
-        _successText.gameObject.SetActive(false);
-        _failText.gameObject.SetActive(false);
         _buttonGroup.SetActive(true);
     }
 

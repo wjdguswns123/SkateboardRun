@@ -19,25 +19,34 @@ public class StageController : MonoBehaviour
 
     private float _stageLength;
 
+    private GameObject[] _coins;
+
     public BackgroundController BGController { get { return _bgCtrl; } }
 
     private void Start()
     {
         _stageLength = _endPoint.transform.position.x - _startPoint.transform.position.x;   // 스테이지 전체 길이 계산.
 
-        for(int i = 0; i < _hurdleReadyPoints.Length; ++i)
+        _coins = GameObject.FindGameObjectsWithTag(ConstantValues.TAG_COIN);
+
+        for (int i = 0; i < _hurdleReadyPoints.Length; ++i)
         {
             _hurdleReadyPoints[i].Set();
         }
     }
 
     /// <summary>
-    /// 플레이어 시작점에 위치.
+    /// 스테이지 초기화.
     /// </summary>
     /// <param name="playerPos"></param>
-    public void SetStartPoint(Transform playerPos)
+    public void Init(Transform playerPos)
     {
         playerPos.position = _startPoint.transform.position;
+
+        for (int j = 0; j < _coins.Length; ++j)
+        {
+            _coins[j].SetActive(true);
+        }
     }
 
     /// <summary>

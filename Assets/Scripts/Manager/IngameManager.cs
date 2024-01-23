@@ -24,6 +24,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     private int _currentGetCoinCount;
     private int _skillScore;
     private int _coinScore;
+    private int _currentScore;
 
     private Stage _currentStageData;
 
@@ -57,7 +58,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
 
         LoadUI();
 
-        _clearScore = 5000;
+        _clearScore = _currentStageData.Star1Score;
 
         yield return YieldCache.WaitForSeconds(1f); // 로딩 UI 볼려고 임시로 1초 딜레이.
 
@@ -91,11 +92,16 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
             var currentPlayerPosX = _player.transform.position.x;
             // 현재 진행 점수 표시.
             var currentRate = _currentStageCtrl.GetCurrentRate(currentPlayerPosX);
-            int currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * _coinScore + _skillScore;
+            _currentScore = (int)(_clearScore * currentRate) + _currentGetCoinCount * _coinScore + _skillScore;
 
-            _ingameUI.SetScoreUI(currentScore);
+            _ingameUI.SetScoreUI(_currentScore);
 
             _bgCtrl.UpdateBackground(_currentStageCtrl.GetMoveLength(currentPlayerPosX));
+
+            if(currentRate >= 1f)
+            {
+                EndGame(true);
+            }
         }
     }
 
@@ -106,7 +112,7 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     /// </summary>
     public void StartGame()
     {
-        _currentStageCtrl.SetStartPoint(_player.transform);
+        _currentStageCtrl.Init(_player.transform);
         _player.Init();
         _bgCtrl.Init(_player.transform.localPosition);
         _ingameUI.Init();
@@ -169,8 +175,21 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         yield return YieldCache.WaitForSeconds(1f);
 
+        int star = 1;
+        if(isSuccess)
+        {
+            if(_currentScore >= _currentStageData.Star3Score)
+            {
+                star = 3;
+            }
+            else if (_currentScore >= _currentStageData.Star2Score)
+            {
+                star = 2;
+            }
+        }
+
         GameResultUI resultUI = UIManager.Instance.LoadUI("GameResultUI").GetComponent<GameResultUI>();
-        resultUI.ShowResult(isSuccess);
+        resultUI.ShowResult(isSuccess, star);
     }
 
     /// <summary>
@@ -198,9 +217,9 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         if(_gameState == Enums.eGameState.Playing)
         {
-            // 스킬 점수 임시 처리.
-            var skillScore = 500;
-            _skillScore += skillScore;
+            //// 스킬 점수 임시 처리.
+            //var skillScore = 500;
+            //_skillScore += skillScore;
 
             _player.Jump(skillIndex);
         }
@@ -245,5 +264,4 @@ public class IngameManager : SingletonMonoBehaviour<IngameManager>
     {
         _ingameUI.SetGrindMode(enable);
     }
-    
 }
