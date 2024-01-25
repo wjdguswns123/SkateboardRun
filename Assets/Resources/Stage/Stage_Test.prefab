@@ -7858,6 +7858,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 2071292935809326413}
     m_Modifications:
     - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
+      propertyPath: _skillObjectIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: tempSkillIndexs.Array.data[0]
       value: 1
       objectReference: {fileID: 0}
@@ -8027,6 +8031,10 @@ PrefabInstance:
       value: 1.32
       objectReference: {fileID: 0}
     - target: {fileID: 7942015409031481436, guid: 0c77e891d0496e54387a88698da4c50a, type: 3}
+      propertyPath: _skillObjectIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942015409031481436, guid: 0c77e891d0496e54387a88698da4c50a, type: 3}
       propertyPath: tempSkillIndexs.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -8188,6 +8196,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 2071292935809326413}
     m_Modifications:
     - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
+      propertyPath: _skillObjectIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: tempSkillIndexs.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -8334,6 +8346,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2071292935809326413}
     m_Modifications:
+    - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
+      propertyPath: _skillObjectIndex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7133448728436011094, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: m_Name
       value: Hurdle_1

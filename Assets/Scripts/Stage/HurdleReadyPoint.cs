@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class HurdleReadyPoint : MonoBehaviour
 {
-    public List<int> tempSkillIndexs;
+    #region Inspector
+
+    [SerializeField]
+    private int _skillObjectIndex;
+
+    #endregion
 
     private List<int> _skillIndexs;
 
@@ -13,7 +18,21 @@ public class HurdleReadyPoint : MonoBehaviour
     /// </summary>
     public void Set()
     {
-        _skillIndexs = tempSkillIndexs;
+        var stageObjectData = StageObjectData.Instance.GetData(_skillObjectIndex);
+
+        if(_skillIndexs == null)
+        {
+            _skillIndexs = new List<int>();
+        }
+
+        if(stageObjectData.UseSkill1 > 0)
+        {
+            _skillIndexs.Add(stageObjectData.UseSkill1);
+        }
+        if(stageObjectData.UseSkill2 > 0)
+        {
+            _skillIndexs.Add(stageObjectData.UseSkill2);
+        }
     }
 
     /// <summary>

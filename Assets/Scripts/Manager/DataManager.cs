@@ -15,6 +15,8 @@ public class DataManager : Singleton<DataManager>
 
         _datas.Add("Config", ConfigData.Instance);
         _datas.Add("Stage", StageData.Instance);
+        _datas.Add("Skill", SkillData.Instance);
+        _datas.Add("StageObject", StageObjectData.Instance);
     }
 
     public void LoadData()

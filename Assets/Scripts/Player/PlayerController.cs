@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
                         if(_animator != null)
                         {
                             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-                            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
+                            _animator.SetInteger(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, 0);
                             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, true);
                         }
                     }
@@ -147,15 +147,13 @@ public class PlayerController : MonoBehaviour
 
         if (_animator != null)
         {
-            switch(skillIndex)
+            if(skillIndex == 0)
             {
-                case 0:
-                    _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
-                    break;
-                case 1:
-                case 2:
-                    _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, true);
-                    break;
+                _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, true);
+            }
+            else if(skillIndex > 0)
+            {
+                _animator.SetInteger(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, skillIndex);
             }
         }
 
@@ -234,7 +232,7 @@ public class PlayerController : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_OLLIE, false);
-            _animator.SetBool(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, false);
+            _animator.SetInteger(ConstantValues.ANIMATOR_BOOL_JUMP_SKILL, 0);
             _animator.SetBool(ConstantValues.ANIMATOR_BOOL_GRIND, false);
         }
     }
