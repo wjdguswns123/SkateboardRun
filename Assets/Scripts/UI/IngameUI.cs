@@ -7,6 +7,8 @@ using TMPro;
 
 public class IngameUI : MonoBehaviour
 {
+    private const float SKILLBUTTON_DRAG_VALUE = 10f;
+
     #region Inspector
 
     [SerializeField]
@@ -21,11 +23,14 @@ public class IngameUI : MonoBehaviour
 
     #endregion
 
+    private Vector2 _jumpBtnPressPosition;
+
     /// <summary>
     /// UI 초기화.
     /// </summary>
     public void Init()
     {
+        _jumpBtnPressPosition = Vector2.zero;
         _scoreText.text = "0";
         DisableAllSkillButton();
         SetGrindMode(false);
@@ -79,8 +84,18 @@ public class IngameUI : MonoBehaviour
     /// </summary>
     public void OnJumpButtonClick()
     {
-        IngameManager.Instance.PlayJump(0);
-        DisableAllSkillButton();
+        if(_jumpBtnPressPosition == Vector2.zero)
+        {
+            Debug.Log("버튼 클릭!");
+            IngameManager.Instance.PlayJump(0);
+            DisableAllSkillButton();
+        }
+    }
+
+    public void OnJumpButtonDragBegin(BaseEventData data)
+    {
+        _jumpBtnPressPosition = Input.mousePosition;
+        Debug.Log("start pos : " + _jumpBtnPressPosition);
     }
 
     /// <summary>
@@ -89,29 +104,52 @@ public class IngameUI : MonoBehaviour
     /// <param name="data"></param>
     public void OnJumpButtonDragEnd(BaseEventData data)
     {
-        // 드래그 종료 시점의 좌표 위치에 UI 있는 지 확인.
-        var eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
-        var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
+        //// 드래그 종료 시점의 좌표 위치에 UI 있는 지 확인.
+        //var eventData = new PointerEventData(EventSystem.current);
+        //eventData.position = Input.mousePosition;
+        //Debug.Log("end pos : " + Input.mousePosition);
 
-        if(results.Count > 0)
+        //var results = new List<RaycastResult>();
+        //EventSystem.current.RaycastAll(eventData, results);
+
+        //if(results.Count > 0)
+        //{
+        //    var skillBtn = results[0].gameObject.GetComponent<SkillButton>();
+        //    if(skillBtn != null)
+        //    {
+        //        IngameManager.Instance.PlayJump(skillBtn.GetSkillIndex());
+        //    }
+        //    else
+        //    {
+        //        IngameManager.Instance.PlayJump(0);
+        //    }
+        //}
+        //else
+        //{
+        //    IngameManager.Instance.PlayJump(0);
+        //}
+        //DisableAllSkillButton();
+
+        Debug.Log("end pos : " + Input.mousePosition);
+        var mousePos = Input.mousePosition;
+
+        if(mousePos.y - _jumpBtnPressPosition.y > SKILLBUTTON_DRAG_VALUE)
         {
-            var skillBtn = results[0].gameObject.GetComponent<SkillButton>();
-            if(skillBtn != null)
-            {
-                IngameManager.Instance.PlayJump(skillBtn.GetSkillIndex());
-            }
-            else
-            {
-                IngameManager.Instance.PlayJump(0);
-            }
+            Debug.Log("skill 1 : " + (mousePos.y - _jumpBtnPressPosition.y));
+            IngameManager.Instance.PlayJump(_skillButtons[0].GetSkillIndex());
+        }
+        else if (_jumpBtnPressPosition.x - mousePos.x > SKILLBUTTON_DRAG_VALUE)
+        {
+            Debug.Log("skill 2 : " + (_jumpBtnPressPosition.x - mousePos.x));
+            IngameManager.Instance.PlayJump(_skillButtons[1].GetSkillIndex());
         }
         else
         {
             IngameManager.Instance.PlayJump(0);
         }
         DisableAllSkillButton();
+
+        _jumpBtnPressPosition = Vector2.zero;
     }
 
     /// <summary>
