@@ -9339,7 +9339,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: _skillObjectIndex
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7133448728436011094, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: m_Name
@@ -9416,7 +9416,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5250033448207162737, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: _skillObjectIndex
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7133448728436011094, guid: 71cfebedbf806264e8dd1f16df96892c, type: 3}
       propertyPath: m_Name

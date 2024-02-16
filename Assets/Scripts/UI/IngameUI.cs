@@ -135,12 +135,12 @@ public class IngameUI : MonoBehaviour
         float moveX = _jumpBtnPressPosition.x - mousePos.x;
         float moveY = mousePos.y - _jumpBtnPressPosition.y;
 
-        if (moveY > moveX && moveY > SKILLBUTTON_DRAG_VALUE)
+        if (moveY > moveX && moveY > SKILLBUTTON_DRAG_VALUE && _skillButtons[0].IsEnableSkill())
         {
             Debug.Log("skill 1 : " + (mousePos.y - _jumpBtnPressPosition.y));
             IngameManager.Instance.PlayJump(_skillButtons[0].GetSkillIndex());
         }
-        else if (moveX > moveY && moveX > SKILLBUTTON_DRAG_VALUE)
+        else if (moveX > moveY && moveX > SKILLBUTTON_DRAG_VALUE && _skillButtons[1].IsEnableSkill())
         {
             Debug.Log("skill 2 : " + (_jumpBtnPressPosition.x - mousePos.x));
             IngameManager.Instance.PlayJump(_skillButtons[1].GetSkillIndex());

@@ -32,4 +32,9 @@ public class SkillButton : MonoBehaviour
     {
         return _currentSkillIndex;
     }
+
+    public bool IsEnableSkill()
+    {
+        return this.gameObject.activeSelf;
+    }
 }
